@@ -1,0 +1,101 @@
+MAKING THE REDUX AND EXPRESS APP FROM SCRATCH
+mkdir reduxApp
+clear
+cd reduxApp
+npm init -y
+npm i --save-dev webpack
+cd ..
+cd reduxApp
+npm i --save-dev webpack
+npm i --save express
+npm i --save babel-core babel-loader babel-preset-es2015 babel-preset-stage-1 babel-preset-react
+npm i --save redux
+touch server.js
+touch webpack.config.js
+mkdir public
+mkdir src
+cd public
+touch index.html
+cd ..
+cd src
+touch app.js
+
+
+MAKING INTEGRATING THE REACT APP
+npm i --save react-dom
+npm i --save react-redux
+npm i --save react-router@3.0.2
+mkdir components
+ 4833  cd components
+ 4834  mkdir pages
+ 4835  cd pages
+ 4836  touch booksList.js
+
+
+
+----------------NODE------------------
+
+* spread operator
+    let s = [1,2,3]
+    let v = [...s]; //copy of s
+
+* use slice to remove a value from a specific index
+    let names = ['a','b','c','d','e','f','g'];
+    const indexToRemove = 3;  //remove 'd'
+    let slicedNames = [...names.slice(0, indexToRemove), ...names.slice(indexToRemove + 1)];
+
+----------------REDUX-----------------
+PURE FUNCTION: given the same input the function will always return the same output
+STORE: hold the whole state tree of the app
+Actions: payloads of info that send data from your app to your store. They are
+         the only source of info for the store, send using "store.dispatch()"
+Reducers: Actions describe the fact that something happened, but don;t specify how the
+          app's state changes in response. this is the job of reducers
+
+Dispatch: The store's reducing function will be called with the current getState() result and
+          the given action synchronously. Its return value will be considered the next state.
+          It will be returned from getState() from now on, and the change listeners will immediately be notified.
+Provider: A provider is nothing more than a combination of actions and reducers designed to work together to manage
+          shared state across multiple components. A merge function, middleware, and/or enhancer may also be included.
+* 3 PRINCIPLES OF REDUX
+    1. Single source of truth
+        The state of your whole app is stored in an object tree within a single store
+    2. State is READ-ONLY
+        the only way to change the state is to emit an Action
+    3. Chnages are made with pure function
+        reducers have to be pure-function
+
+IMMUTABILITY OF THE STATE:
+* when making operations with arryas:
+        - DO NOT USE MUTABLE METHODS: push() or splice()
+        - use: concat(), slice() or ...spread operator
+
+
+---------------REACT-REDUX----------------
+React provides the ability to spin up new rooms, and Redux provides the Genie mind-reader logic behind their production.
+http://www.youhavetolearncomputers.com/blog/2015/9/15/a-conceptual-overview-of-redux-or-how-i-fell-in-love-with-a-javascript-state-container
+
+- The main differences between Redux and full flux implementations are:
+    * There are no discrete dispatchers in Redux; your store listens directly for actions, and uses a function called a reducer (more on this later) to return a new app state each time an action is dispatched.
+    * Redux holds your entire application's state in one place.
+    * Your app's state is immutable.
+
+store -> provider
+in order to make the redux store available in react we need redux component called provider
+Provider: wraps entire react app and passes this store as a props to react components
+
+------------------REACT ROUTER---------------LEC 29
+Router: Wraps all react app and register all internal roots
+
+Route: allows to define roots and respective component to render
+
+IndexRoute: Allows to define which component should be rendered first when our main component is rendered
+
+BrowserHistory & HashHistory: Listen and track all internal urls
+BrowserHistory: dependent from Routes set in the server
+HashHistory: independently from the Routes set in our server
+    - marks any route with a '#'
+    - helpful during development
+    - allows testing routes independently from server routes
+    - not good for production
+    - not seo compliant
