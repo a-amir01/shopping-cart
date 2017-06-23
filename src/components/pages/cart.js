@@ -5,11 +5,15 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import {Modal, Panel, Col, Row, Well, Button, ButtonGroup, Label} from 'react-bootstrap';
+import {Image, Modal, Panel, Col, Row, Well, Grid, Button, ButtonGroup, Label} from 'react-bootstrap';
 import {bindActionCreators} from 'redux';
-import {deleteCartItem, updateCartItem} from '../../actions/cartActions';
+import {deleteCartItem, updateCartItem, getCart} from '../../actions/cartActions';
 
 class Cart extends React.Component{
+
+    componentDidMount(){
+        this.props.getCart();
+    }
 
     onDelete(_id){
         // Create a copy of the current array of books
@@ -28,12 +32,12 @@ class Cart extends React.Component{
     }
 
     onIncrement(_id){
-        this.props.updateCartItem(_id, 1);
+        this.props.updateCartItem(_id, 1, this.props.cart);
     }
 
     onDecrement(_id, quantity){
         if (quantity > 1)
-            this.props.updateCartItem(_id, -1);
+            this.props.updateCartItem(_id, -1, this.props.cart);
     }
 
     constructor(){
@@ -63,23 +67,25 @@ class Cart extends React.Component{
         return (<div></div>);
     }
     renderCart(){
-        console.log("kokokokokok\n\n");
-
         const cartItemsList = this.props.cart.map((cartArr)=>{
             return (
-                //NEED TO FIX WARNING
                 <Panel key={cartArr._id}>
+                    <Row>
+                        <Col xs={12} sm={4}>
+                            <Image className='img' src={cartArr.image}  responsive/>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col xs={12} sm={4}>
                             <h6>{cartArr.title}</h6><span>    </span>
                         </Col>
-                        <Col xs={12} sm={2}>
+                        <Col xs={12} sm={6}>
                             <h6>{cartArr.price}</h6>
                         </Col>
-                        <Col xs={12} sm={2}>
+                        <Col xs={12} sm={4}>
                             <h6><Label bsStyle="success">{cartArr.quantity}</Label></h6>
                         </Col>
-                        <Col xs={6} sm={4}>
+                        <Col xs={12} sm={6}>
                             <ButtonGroup style={{minWidth: '300px'}}>
                                 <Button onClick={this.onDecrement.bind(this, cartArr._id, cartArr.quantity)} bsStyle="default" bsSize="small">-</Button>
                                 <Button onClick={this.onIncrement.bind(this, cartArr._id)} bsStyle="default" bsSize="small">+</Button>
@@ -130,7 +136,8 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return bindActionCreators({
             deleteCartItem : deleteCartItem,
-            updateCartItem: updateCartItem
+            updateCartItem: updateCartItem,
+            getCart: getCart,
         }, dispatch);
 }
 

@@ -10,8 +10,13 @@ import _Menu from './components/menu';
 import Footer from './components/footer';
 
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {getCart} from '../src/actions/cartActions';
 
 class Main extends React.Component {
+    componentDidMount(){
+        this.props.getCart();
+    }
     render(){
         return(
             <div>
@@ -24,9 +29,18 @@ class Main extends React.Component {
     }
 }
 
+
 function mapStateToProps(state) {
     return {
         totalQty: state.cartReducer.totalQty,
     }
 }
-export default connect(mapStateToProps)(Main);
+
+//so when you have a cart you can go on any page and still have the number of items
+//in the cart
+function mapDispatchToProps(dispatch){
+    return bindActionCreators({
+        getCart: getCart,
+    }, dispatch);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

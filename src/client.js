@@ -8,36 +8,26 @@ import {Provider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
 
 import logger from 'redux-logger';
+//allows you to write action creators that return a function instead of an action
+import thunk from 'redux-thunk';
 
 import reducers from './reducers/index';
 
-import {addToCart} from './actions/cartActions';
-import {postBooks, deleteBooks, updateBooks} from './actions/booksActions';
-
 //LOG
-const middleware = applyMiddleware(logger);
+const middleware = applyMiddleware(thunk ,logger);
 
+//gloabl var we use to capture the "intial state"
+//from Redux Store in the server and pass it to the Store in the client
+const initialState = window.INITIAL_STATE;
 //tell the store what its reducer functions are
-const store = createStore(reducers, middleware);
+const store = createStore(reducers, initialState, middleware);
 
-
-import BooksList from './components/pages/booksList';
-import BooksForm from './components/pages/booksForm';
-import Cart from './components/pages/cart';
-import Main from './main';
+import routes from './routes';
 
 const Routes = (
     //lecture 14
     <Provider store={store}>
-        <Router history={browserHistory}>
-            <Route path="/" component={Main}>
-                {/*render by refault*/}
-                <IndexRoute component={BooksList}/>
-                {/*routes for the rest of children component*/}
-                <Route path="/admin" component={BooksList}/>
-                <Route path="/cart" component={Cart}/>
-            </Route>
-        </Router>
+        {routes}
     </Provider>
 );
 
