@@ -29,7 +29,7 @@ class BookItem extends React.Component {
                 this.props.addToCart(book);
             }else{
                 //update quantity
-                this.props.updateCartItem(_id, 1);
+                this.props.updateCartItem(_id, 1, this.props.cart);
             }
         }
         else{

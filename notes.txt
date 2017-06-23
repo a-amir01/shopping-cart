@@ -18,7 +18,7 @@ cd public
 touch index.html
 cd ..
 cd src
-touch app.js
+touch client.js
 
 
 MAKING INTEGRATING THE REACT APP
@@ -99,3 +99,77 @@ HashHistory: independently from the Routes set in our server
     - allows testing routes independently from server routes
     - not good for production
     - not seo compliant
+
+
+---------------MOGNO--------------------
+db.books.insert(
+    {
+        "title": "First book title",
+        "description": "first book des",
+        "price": 15.34,
+
+    }
+)
+
+db.getCollection('books').find({})
+db.getCollection('books').find({
+    "price": {$gt: 15}
+})
+
+db.books.update(
+    {"_id": ObjectId("594c98ac5563e8ee6c477d23")},
+    {$set: {"title": "this is updated"}}  //without set only thing in there will be title other fields deleted
+
+)
+
+db.books.update(
+    {"_id": ObjectId("594c98ac5563e8ee6c477d22")},
+    {$set: {"title": "this book didnt exist"}},
+    {upsert: true}   //if the field doesnt exists it will create it for you
+)
+
+db.books.update(
+    {"price": {$gt: 20},
+    {$set: { "discount": 55}},
+    {multi:true},
+)
+
+---------------API-----------------
+Advanced REST Client (chrome extention)
+
+worksflow:
+1. UI sends a book obj to action creator
+2. action creator will NOT directly dispatch the book payload to the reducer
+    - instead
+        1. makes http request to the api using axios
+        2. when request is delivered to mongodb the response will be sent back to action creator
+        3. then the action creator dispatches it to the reducers
+        4. then the state is updated with the new data
+        5. the UI is rerendered with the new data in the store which is the data in the db
+
+AXIOS: http client
+SUPPORTS:
+    1. promise
+    2. work on client and server,
+    3. cross-side request forgery protection by default
+allows: write sml, http request
+
+REDUX-THUNK: middleware allows you to write action creators that return a function instead of an action
+
+
+REVERSE PROXY: type of proxy server that retires data on behalf of client from one or more servers(API server in our case)
+retrive all data request to api server
+proper separation of concerns
+cleaener code
+security: internal network structure is hidden to client
+"ALL HTTP requests to localhost:3000/api/* will be routed to: localhost:3001"
+To identify anonymos users we will create persistent session
+    1. the 1st time a user connects to a websote the server will send a cookie with the session id
+    2. cookie: small document the browser stores on client computer
+        cookie: store limited amount of data
+    3. it can be accessed again by the server
+    4. next time user will connect to our website the server will read the cookie and recognize the session id
+
+store the session id in a cookie and cart data in mongodb and associaite it with a session id
+    need to track sessions in our api server
+    when the session is expired the relative cart data will auto be deleted from db

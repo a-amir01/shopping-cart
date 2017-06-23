@@ -1,32 +1,32 @@
 "use strict";
 
+const initState = {
+    books: []
+};
+
+// {
+// books:[{
+//         _id: 1,
+//         title: 'book title',
+//         description: 'the description',
+//         price: 33
+//     },
+//     {
+//         _id: 2,
+//         title: 'book title',
+//         description: 'the description',
+//         price: 444
+//     }]
+// },
+
 //BOOKS REDUCERS
-export function booksReducers(state={
-    books:[{
-            _id: 1,
-            title: 'book title',
-            description: 'the description',
-            price: 33
-        },
-        {
-            _id: 2,
-            title: 'book title',
-            description: 'the description',
-            price: 444
-        }]
-    }, action){
+export function booksReducers(state=initState ,action){
         console.log("BOOKSREDUCERS");
         switch(action.type){
             case "GET_BOOKS":
-                console.log("fguyguygug");
-                let v = {...state, books:[...state.books]}
-                console.log("v1:", {books:[...state.books]});
-                console.log("v2:", state);
-                console.log("v3:", v);
-                console.log("v4:", {...state});
                 // let books = state.books.concat(action.payload);
                 // return {books};
-                return {...state, books:[...state.books]}
+                return {...state, books:[...action.payload]};
                 break;
             case "POST_BOOK":
                 return {...state, books:[...state.books, ...action.payload], msg:'Saved! Click to continue', style:'success', validation:'success'}
@@ -50,7 +50,7 @@ export function booksReducers(state={
                         //2 is not equal to '2'
                         return book._id == action.payload;
                     }
-                )
+                );
                 //use slice to remove the book at the specified index
                 return {books: [...currentBookToDelete.slice(0, indexToDelete), ...currentBookToDelete.slice(indexToDelete + 1)]}
                 break;
@@ -63,12 +63,12 @@ export function booksReducers(state={
                     function(book){
                         return book._id === action.payload._id;
                     }
-                )
+                );
                 // Create a new book object with the new values and with the same array index of the item we want to replace. To achieve this we will use ...spread but we could use concat methos too
                 const newBookToUpdate = {
                     ...currentBookToUpdate[indexToUpdate],
                     title: action.payload.title
-                }
+                };
                 // This Log has the purpose to show you how newBookToUpdate looks like
                 console.log("what is it newBookToUpdate", newBookToUpdate);
                 //use slice to remove the book at the specified index, replace with the new object and concatenate witht he rest of items in the array
@@ -77,5 +77,5 @@ export function booksReducers(state={
         }
         console.log("BOOKSREDUCERS END");
         //return {...state,  books: []};
-        return state
+        return state;
 }

@@ -8,6 +8,8 @@ import {Provider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
 
 import logger from 'redux-logger';
+//allows you to write action creators that return a function instead of an action
+import thunk from 'redux-thunk';
 
 import reducers from './reducers/index';
 
@@ -15,7 +17,7 @@ import {addToCart} from './actions/cartActions';
 import {postBooks, deleteBooks, updateBooks} from './actions/booksActions';
 
 //LOG
-const middleware = applyMiddleware(logger);
+const middleware = applyMiddleware(thunk ,logger);
 
 //tell the store what its reducer functions are
 const store = createStore(reducers, middleware);
@@ -31,10 +33,10 @@ const Routes = (
     <Provider store={store}>
         <Router history={browserHistory}>
             <Route path="/" component={Main}>
-                {/*render by refault*/}
+                {/*render by default*/}
                 <IndexRoute component={BooksList}/>
                 {/*routes for the rest of children component*/}
-                <Route path="/admin" component={BooksList}/>
+                <Route path="/admin" component={BooksForm}/>
                 <Route path="/cart" component={Cart}/>
             </Route>
         </Router>
