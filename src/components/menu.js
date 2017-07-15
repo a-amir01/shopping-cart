@@ -19,7 +19,7 @@ class _Menu extends React.Component{
             <Navbar inverse fixedTop>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="/">React-Bootstrap</a>
+                        <a href="/">Gallery</a>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>

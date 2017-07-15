@@ -39,6 +39,8 @@ export function postBooks(book){
 
 export function deleteBooks(id){
     return (dis)=>{
+        console.log("AMIDNDNDNDNND");
+        console.log(id);
         axios.delete("api/books/" + id)
             .then((res)=>{
                 dis({type: "DELETE_BOOK", payload: id})
@@ -54,9 +56,15 @@ export function deleteBooks(id){
     // }
 }
 
-export function updateBooks(book){
+export function updateBooks(book) {
     return {
         type: "UPDATE_BOOK",
         payload: book
+    }
+}
+
+export function resetButton(){
+    return {
+        type: "RESET_BUTTON",
     }
 }

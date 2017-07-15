@@ -1,9 +1,14 @@
+require('babel-core/register')({
+    "presets": ["es2015", "react", "stage-1"]
+});
+
 const express = require('express');
 const path = require('path');
-const favicon = require('serve-favicon');
+//const favicon = require('serve-favicon');
 const logger = require('morgan');
 
 const httpProxy = require('http-proxy');
+const requestHandler = require('./requestHandler');
 const app = express();
 
 //PROXY TO API
@@ -22,14 +27,9 @@ app.use('/api', (req, res)=>{
 app.use(logger('dev'));
 
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-// app.use('/', index);
-// app.use('/users', users);
-
-app.get('*', (req, res) =>{
-    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-});
+//app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(requestHandler);
 
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {

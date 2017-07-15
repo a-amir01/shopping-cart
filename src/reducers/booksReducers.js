@@ -35,10 +35,10 @@ export function booksReducers(state=initState ,action){
                 return {...state, msg:'Please, try again', style:'danger', validation:'error'}
                 break;
             case "RESET_BUTTON":
-                return {...state, msg:null, style:'primary', validation:null}
+                return {...state, msg:null, style:'primary', validation : null}
                 break;
             case "DELETE_BOOK":
-                console.log("FUCKKKKKKKK YOUUUUU!!!!!!!!!");
+                console.log("DELETE_BOOK!!!!!!!!!");
                 console.log(...state);
                 // Create a copy of the current array of books
                 const currentBookToDelete = [...state.books]

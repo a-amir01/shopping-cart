@@ -9,6 +9,12 @@ const initialState = {
 export function cartReducers(state=initialState, action){
     console.log("CARTSREDUCERS");
     switch(action.type){
+        case "GET_CART":
+            return {...state,
+                cart: action.payload,
+                totalAmount : totals(action.payload).amount,
+                totalQty: totals(action.payload).qty,
+            };
         case "ADD_TO_CART":
             return {...state,
                 cart: action.payload,

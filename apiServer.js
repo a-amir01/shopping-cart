@@ -5,6 +5,9 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+
 const app = express();
 
 app.use(logger('dev'));
@@ -15,7 +18,37 @@ app.use(cookieParser());
 
 //APIs
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/bookshop');
+mongoose.connect('mongodb://testUser:test@ds031277.mlab.com:31277/bookshop');
+// mongoose.connect('mongodb://localhost:27017/bookshop');
+
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, '# MongoDb - connection error: '));
+//set up session
+app.use(session({
+    secret: "mySecretString",  //used to sign session id cookie
+    saveUninitialized: false,  //only if cart is updated
+    resave: false, //session wont be resaved if it didnt change
+    cookie: {maxAge: 1000 * 60 * 60 * 24 * 2}, //2 days in mili seconds
+    store: new MongoStore({mongooseConnection: db, ttl: 2 * 24 * 60 * 6})
+    //ttl: 2 days * 24 hours * 60 min * 60 sec
+}));
+
+app.post('/cart', (req, res)=>{
+    const cart = req.body;
+    req.session.cart = cart;
+    req.session.save((err)=>{
+        if(err) throw err;
+        res.json(req.session.cart);
+    });
+});
+
+app.get('/cart', (req, res)=>{
+    if(typeof req.session.cart !== 'undefined'){
+        res.json(req.session.cart);
+    }
+});
+//end session
 const Books = require('./models/books');
 
 app.post('/books', (req, res)=> {  //post request passing an array of books as body
@@ -41,7 +74,10 @@ app.delete('/books/:_id', (req, res)=> {
     "use strict";
     const query = {_id: req.params._id};
     Books.remove(query, (err, books)=> {
-        if(err) throw err;
+        if(err) {
+            console.log("ERRORR!!!!!!!!!!!!!!");
+            // throw err;
+        }
 
         res.json(books);
     });
@@ -76,6 +112,23 @@ app.put('/books/:_id', (req, res)=> {
 });
 //END APIs
 
+app.get('/images', (req, res)=>{
+    const imgFolder = __dirname + '/public/images';
+    const fs = require('fs');
+    fs.readdir(imgFolder, (err, files)=>{
+        if(err) console.error(err);
+
+        const filesArr = [];
+        files.forEach((file)=>{
+            //replace all spaces with _
+            //replace(/ /g, '_')
+            filesArr.push({name:file});
+        });
+        //send the json response with the array
+        res.json(filesArr);
+    });
+
+});
 
 // app.use('/', index);
 // app.use('/users', users);
